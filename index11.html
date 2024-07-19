@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assistive glasses for visually impaired to comprehend Kannada language</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        .header img {
+            width: 50px; /* Adjust based on actual size */
+            height: auto;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px; /* Adjust as needed */
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            width: 100%;
+            display: flex;
+            justify-content: space-around; /* Adjust this to control spacing */
+            flex-wrap: wrap; /* Ensure responsiveness */
+            align-items: center;
+            margin-top: 20px;
+        }
+        .output img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        .output div {
+            background-color: #fff;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .title {
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="data:image/jpeg;base64,{{ clipart_data }}" alt="ClipArt">
+        <h1 class="title">Assistive glasses for visually impaired to comprehend Kannada language</h1>
+    </div>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" required>
+        <input type="submit" value="Generate Output">
+    </form>
+    {% if image_data %}
+        <img src="data:image/jpeg;base64,{{ image_data }}" alt="Uploaded Image">
+    {% endif %}
+    {% if output_without_model and output_with_model %}
+        <div class="output">
+            <div>
+                <h2>Using a Simple OCR</h2>
+                <p>{{ output_without_model }}</p>
+            </div>
+            <div>
+                <h2>Using Our Prescribed Model</h2>
+                <p>{{ output_with_model }}</p>
+            </div>
+        </div>
+        <button onclick="playAudio()">Play Audio</button>
+    {% endif %}
+    <script>
+        function playAudio() {
+          // Make a request to the play handler of the current URL
+          fetch(window.location.href + 'play', {
+              method: 'GET',
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              // Return the response as a blob (binary large object)
+              return response.blob();
+          })
+          .then(blob => {
+              // Create a URL for the blob
+              const audioUrl = URL.createObjectURL(blob);
+              // Create an audio element
+              const audio = new Audio(audioUrl);
+              // Play the audio
+              audio.play();
+              console.log('Audio playback started');
+          })
+          .catch(error => {
+              // Handle error here
+              console.error('Error during audio playback request:', error);
+          });
+      }
+    </script>
+</body>
+</html>
